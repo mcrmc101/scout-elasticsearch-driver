@@ -13,6 +13,7 @@ use ScoutElastic\Facades\ElasticClient;
 use ScoutElastic\Indexers\IndexerInterface;
 use ScoutElastic\Payloads\TypePayload;
 use stdClass;
+use Illuminate\Support\LazyCollection;
 
 class ElasticEngine extends Engine
 {
@@ -362,4 +363,44 @@ class ElasticEngine extends Engine
             ->orderBy($model->getScoutKeyName())
             ->unsearchable();
     }
+
+    /**
+ * {@inheritdoc}
+ */
+public function lazyMap(Builder $builder, $results, $model)
+{
+    // Implement the lazy mapping logic here
+    // This method should return a LazyCollection
+    // You might need to adjust the implementation based on your specific needs
+    return LazyCollection::make(function () use ($builder, $results, $model) {
+        foreach ($this->map($builder, $results, $model) as $item) {
+            yield $item;
+        }
+    });
+}
+
+    /**
+ * {@inheritdoc}
+ */
+public function createIndex($name, array $options = [])
+{
+    // Implement index creation logic
+    // You might want to use the ElasticClient facade here
+    return ElasticClient::indices()->create([
+        'index' => $name,
+        'body' => $options,
+    ]);
+}
+
+    /**
+ * {@inheritdoc}
+ */
+public function deleteIndex($name)
+{
+    // Implement index deletion logic
+    // You might want to use the ElasticClient facade here
+    return ElasticClient::indices()->delete(['index' => $name]);
+}
+
+    
 }
