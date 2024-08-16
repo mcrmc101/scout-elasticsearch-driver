@@ -1,5 +1,5 @@
 {
-    "name": "artemalexeev/scout-elasticsearch-driver",
+    "name": "mcrmc101/scout-elasticsearch-driver",
     "type": "library",
     "description": "The Elasticsearch Driver for Laravel Scout",
     "keywords": [
